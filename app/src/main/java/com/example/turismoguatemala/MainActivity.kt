@@ -48,9 +48,9 @@ class MainActivity : ComponentActivity() {
 fun PantallaDescubrimientoDestinosApp(modifier: Modifier = Modifier) {
     val destinos = remember {
         mutableStateListOf(
-            Destino("Semuc Champey", "Un hermoso monumento natural en medio de la jungla.", android.R.drawable.ic_menu_camera),
-            Destino("Tikal", "Un sitio arqueológico con ruinas mayas rodeadas de naturaleza.", android.R.drawable.ic_menu_compass),
-            Destino("Rio Dulce", "Un destino de aventuras con impresionantes paisajes acuáticos.", android.R.drawable.ic_menu_gallery)
+            Destino("El cimarron", "Un hermoso monumento natural en medio del desierto.", R.drawable.cimarron),
+            Destino("Playa blanca", "Una playa preciosa  en al atlantico.", R.drawable.plbl),
+            Destino("Laguna Ordoñez", "Un destino de aventuras con impresionantes paisajes motañosos.",R.drawable.lagordo)
         )
     }
 
