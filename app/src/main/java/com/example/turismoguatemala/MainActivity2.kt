@@ -36,12 +36,12 @@ class MainActivity2 : ComponentActivity() {
                 // Pantalla de Información Detallada para un destino específico
                 Scaffold(modifier = Modifier.fillMaxSize()) {
                     val destino = Destino(
-                        nombre = "Semuc Champey",
-                        descripcion = "Un hermoso monumento natural en medio de la jungla.",
+                        nombre = "Cimarron",
+                        descripcion = "Un hermoso monumento natural en medio del desierto.",
                         imagenResId = R.drawable.cimarron,  // Reemplaza con tu recurso real
-                        comoLlegar = "Puedes llegar en autobús desde Ciudad de Guatemala hasta Cobán, luego tomar un 4x4 hacia Lanquín.",
-                        queLlevar = "Lleva ropa cómoda, traje de baño, protector solar, y suficiente agua.",
-                        queEsperar = "Naturaleza increíble, senderos de trekking y piscinas naturales de agua cristalina."
+                        comoLlegar = "Puedes llegar en autobús desde Ciudad de Guatemala hasta huehuetengango y luego tomar transporte hacia el cimarron.",
+                        queLlevar = "Lleva ropa cómoda, protector solar y suficiente agua.",
+                        queEsperar = "Naturaleza increíble, senderos y caminata de 2 horas."
                     )
                     // Mostrar la pantalla con la información del destino
                     PantallaInformacionDetallada(destino = destino, onBack = {})
@@ -142,12 +142,12 @@ fun InformacionSeccion(titulo: String, descripcion: String) {
 @Composable
 fun PreviewPantallaInformacionDetallada() {
     val destino = Destino(
-        "Semuc Champey",
-        "Un hermoso monumento natural en medio de la jungla.",
-        R.drawable.cimarron,  // Asegúrate de tener esta imagen en res/drawable
-        comoLlegar = "Puedes llegar en autobús desde Ciudad de Guatemala hasta Cobán, luego tomar un 4x4 hacia Lanquín.",
-        queLlevar = "Lleva ropa cómoda, traje de baño, protector solar, y suficiente agua.",
-        queEsperar = "Naturaleza increíble, senderos de trekking y piscinas naturales de agua cristalina."
+        nombre = "Cimarron",
+        descripcion = "Un hermoso monumento natural en medio del desierto.",
+        imagenResId = R.drawable.cimarron,  // Reemplaza con tu recurso real
+        comoLlegar = "Puedes llegar en autobús desde Ciudad de Guatemala hasta huehuetengango y luego tomar transporte hacia el cimarron.",
+        queLlevar = "Lleva ropa cómoda, protector solar y suficiente agua.",
+        queEsperar = "Naturaleza increíble, senderos y caminata de 2 horas."
     )
     PantallaInformacionDetallada(destino = destino, onBack = {})
 }

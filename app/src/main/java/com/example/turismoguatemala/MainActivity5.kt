@@ -34,18 +34,18 @@ fun PantallaApoyoComunidadLocal() {
     // Lista de proyectos de turismo sostenible
     val proyectosSostenibles = listOf(
         ProyectoSostenible(
-            nombre = "Reforestación en Semuc Champey",
-            descripcion = "Proyecto que busca reforestar áreas afectadas en la región de Semuc Champey.",
-            detalles = "Este proyecto se centra en la plantación de árboles autóctonos y el involucramiento de la comunidad local en actividades de conservación."
+            nombre = "Reforma de senderos el Cimarron",
+            descripcion = "Proyecto que mejorar los senderos para llegar al lugar.",
+            detalles = "Este proyecto se centra en arreglar y mejorar los senderos del Cimarron."
         ),
         ProyectoSostenible(
-            nombre = "Turismo Comunitario en Tikal",
-            descripcion = "Un proyecto que involucra a las comunidades mayas en el turismo.",
+            nombre = "Turismo en laguna Ordoñez",
+            descripcion = "Un proyecto que involucra a la comunidad para promover el turismo.",
             detalles = "Los visitantes pueden aprender sobre la cultura local y contribuir a proyectos de desarrollo comunitario."
         ),
         ProyectoSostenible(
-            nombre = "Conservación del Lago Atitlán",
-            descripcion = "Iniciativa para reducir la contaminación y proteger el ecosistema del lago.",
+            nombre = "Conservación de Playa blanca",
+            descripcion = "Iniciativa para reducir la contaminación y proteger el ecosistema de la playa.",
             detalles = "El proyecto incluye campañas de concientización y actividades de limpieza en colaboración con los turistas y la comunidad."
         )
     )
