@@ -25,6 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.turismoguatemala.Destino
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,12 +119,7 @@ fun PantallaDescubrimientoDestinos(
     }
 }
 
-// Modelo de datos para los destinos
-data class Destino(
-    val nombre: String,
-    val descripcion: String,
-    val imagenResId: Int
-)
+
 
 // Componente para mostrar cada destino en una tarjeta
 @Composable
