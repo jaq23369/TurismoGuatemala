@@ -34,9 +34,9 @@ class MainActivity4 : ComponentActivity() {
 fun PantallaPlanificacionViajes() {
     // Lista de destinos disponibles
     val destinosDisponibles = listOf(
-        Destino("Semuc Champey", "Un monumento natural en Guatemala.", R.drawable.cimarron),
-        Destino("Tikal", "Ruinas mayas en medio de la jungla.", R.drawable.lagordo),
-        Destino("Atitlán", "Un hermoso lago rodeado de volcanes.", R.drawable.plbl)
+        Destino("Cimarron", "Un monumento natural en Guatemala.", R.drawable.cimarron),
+        Destino("Laguna ordoñez", "Precioso lago en una de las montañas más altas del país.", R.drawable.lagordo),
+        Destino("Atitlán", "Una hermosa playa en el atlantico.", R.drawable.plbl)
     )
 
     // Lista mutable para almacenar los destinos seleccionados por el usuario

@@ -34,19 +34,19 @@ fun PantallaNotificacionesYAlertas() {
     // Lista de destinos con sus condiciones actuales
     val destinos = listOf(
         DestinoConNotificacion(
-            nombre = "Semuc Champey",
+            nombre = "El Cimarron",
             clima = "Lluvia ligera",
             accesibilidad = "Accesible",
             notificacionesHabilitadas = false
         ),
         DestinoConNotificacion(
-            nombre = "Tikal",
+            nombre = "Laguna ordoñez",
             clima = "Soleado",
             accesibilidad = "Accesible",
             notificacionesHabilitadas = true
         ),
         DestinoConNotificacion(
-            nombre = "Lago Atitlán",
+            nombre = "Playa Blanca",
             clima = "Nublado",
             accesibilidad = "Cerrado por mantenimiento",
             notificacionesHabilitadas = false
