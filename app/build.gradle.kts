@@ -51,6 +51,7 @@ android {
 
 dependencies {
 
+    implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)

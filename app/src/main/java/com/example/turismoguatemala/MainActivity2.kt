@@ -38,7 +38,7 @@ class MainActivity2 : ComponentActivity() {
                     val destino = Destino(
                         nombre = "Cimarron",
                         descripcion = "Un hermoso monumento natural en medio del desierto.",
-                        imagenResId = R.drawable.cimarron,  // Reemplaza con tu recurso real
+                        imagenResId = R.drawable.cimarron,
                         comoLlegar = "Puedes llegar en autobús desde Ciudad de Guatemala hasta huehuetengango y luego tomar transporte hacia el cimarron.",
                         queLlevar = "Lleva ropa cómoda, protector solar y suficiente agua.",
                         queEsperar = "Naturaleza increíble, senderos y caminata de 2 horas."
