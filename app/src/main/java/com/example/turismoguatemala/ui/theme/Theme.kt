@@ -1,5 +1,6 @@
 package com.example.turismoguatemala.ui.theme
 
+
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -7,6 +8,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.example.turismoguatemala.ui.theme.Shapes
 
 // Definición de colores
 private val DarkColorPalette = darkColorScheme(
@@ -45,6 +47,7 @@ fun TurismoGuatemalaTheme(
     MaterialTheme(
         colorScheme = colors,
         typography = Typography,
+        shapes = Shapes,
         content = content
     )
 }
