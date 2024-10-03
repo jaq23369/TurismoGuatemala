@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.turismoguatemala.ui.theme.TurismoGuatemalaTheme
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -21,8 +23,8 @@ class MainActivity6 : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TurismoGuatemalaTheme {
-                // Pantalla principal de Notificaciones y Alertas
-                PantallaNotificacionesYAlertas()
+                val navController = rememberNavController()  // Añadimos el NavController
+                PantallaNotificacionesYAlertas(navController)
             }
         }
     }
@@ -30,7 +32,7 @@ class MainActivity6 : ComponentActivity() {
 
 // Pantalla de Notificaciones y Alertas
 @Composable
-fun PantallaNotificacionesYAlertas() {
+fun PantallaNotificacionesYAlertas(navController: NavHostController) {  // Añadimos el NavController
     // Lista de destinos con sus condiciones actuales
     val destinos = listOf(
         DestinoConNotificacion(
@@ -40,7 +42,7 @@ fun PantallaNotificacionesYAlertas() {
             notificacionesHabilitadas = false
         ),
         DestinoConNotificacion(
-            nombre = "Laguna ordoñez",
+            nombre = "Laguna Ordoñez",
             clima = "Soleado",
             accesibilidad = "Accesible",
             notificacionesHabilitadas = true
@@ -105,6 +107,16 @@ fun PantallaNotificacionesYAlertas() {
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Botón para regresar a la pantalla anterior
+        Button(
+            onClick = { navController.popBackStack() },  // Navegación para volver
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text("Volver")
+        }
     }
 }
 
@@ -120,6 +132,6 @@ data class DestinoConNotificacion(
 @Composable
 fun PreviewPantallaNotificacionesYAlertas() {
     TurismoGuatemalaTheme {
-        PantallaNotificacionesYAlertas()
+        PantallaNotificacionesYAlertas(rememberNavController())  // En el Preview, usamos navController
     }
 }

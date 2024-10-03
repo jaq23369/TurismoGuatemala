@@ -14,6 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.turismoguatemala.ui.theme.TurismoGuatemalaTheme
 
 class MainActivity3 : ComponentActivity() {
@@ -21,8 +23,8 @@ class MainActivity3 : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TurismoGuatemalaTheme {
-                // Pantalla principal de Interacción Comunitaria
-                PantallaInteraccionComunitaria()
+                val navController = rememberNavController()  // Añadimos el navController
+                PantallaInteraccionComunitaria(navController)
             }
         }
     }
@@ -30,7 +32,7 @@ class MainActivity3 : ComponentActivity() {
 
 // Pantalla de Interacción Comunitaria
 @Composable
-fun PantallaInteraccionComunitaria() {
+fun PantallaInteraccionComunitaria(navController: NavHostController) {  // Añadimos navController
     var nombreUsuario by remember { mutableStateOf("") }
     var comentario by remember { mutableStateOf("") }
     val reseñas = remember { mutableStateListOf<Reseña>() }
@@ -112,6 +114,16 @@ fun PantallaInteraccionComunitaria() {
         ) {
             Text("Enviar reseña")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Botón para regresar a la pantalla anterior o principal
+        Button(
+            onClick = { navController.popBackStack() }, // Usamos el navController para regresar
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text("Volver a la pantalla principal")
+        }
     }
 }
 
@@ -125,7 +137,8 @@ data class Reseña(
 @Composable
 fun PreviewPantallaInteraccionComunitaria() {
     TurismoGuatemalaTheme {
-        PantallaInteraccionComunitaria()
+        PantallaInteraccionComunitaria(rememberNavController())  // En la vista previa, inicializamos el navController
     }
 }
+
 

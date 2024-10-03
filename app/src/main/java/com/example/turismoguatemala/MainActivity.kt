@@ -1,5 +1,6 @@
 package com.example.turismoguatemala
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.turismoguatemala.ui.theme.TurismoGuatemalaTheme
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,19 +27,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.turismoguatemala.Destino
-
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TurismoGuatemalaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    // Pantalla principal de Descubrimiento de Destinos
-                    PantallaDescubrimientoDestinosApp(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                // Creamos el NavController para manejar la navegación
+                val navController = rememberNavController()
+
+                // Usamos Scaffold para incluir la barra de navegación inferior
+                Scaffold(
+                    bottomBar = { BottomNavBar(navController) } // Agrega la barra de navegación inferior
+                ) {
+                    // Muestra el NavGraph que maneja la navegación entre las pantallas
+                    AppNavGraph(navController = navController)
                 }
             }
         }
@@ -47,12 +55,15 @@ class MainActivity : ComponentActivity() {
 // Función principal que muestra la pantalla de "Descubrimiento de Destinos"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaDescubrimientoDestinosApp(modifier: Modifier = Modifier) {
+fun PantallaDescubrimientoDestinosApp(
+    navController: NavHostController, // Recibe el navController
+    modifier: Modifier = Modifier
+) {
     val destinos = remember {
         mutableStateListOf(
             Destino("El cimarron", "Un hermoso monumento natural en medio del desierto.", R.drawable.cimarron),
-            Destino("Playa blanca", "Una playa preciosa  en al atlantico.", R.drawable.plbl),
-            Destino("Laguna Ordoñez", "Un destino de aventuras con impresionantes paisajes motañosos.",R.drawable.lagordo)
+            Destino("Playa blanca", "Una playa preciosa en el atlántico.", R.drawable.plbl),
+            Destino("Laguna Ordoñez", "Un destino de aventuras con impresionantes paisajes montañosos.", R.drawable.lagordo)
         )
     }
 
@@ -76,6 +87,10 @@ fun PantallaDescubrimientoDestinosApp(modifier: Modifier = Modifier) {
                         )
                     )
                 },
+                onDestinoClick = { destino ->
+                    // Aquí navegas a la pantalla de detalles del destino seleccionado
+                    navController.navigate("detalles/${destino.nombre}")
+                },
                 modifier = modifier.padding(it)
             )
         }
@@ -87,6 +102,7 @@ fun PantallaDescubrimientoDestinosApp(modifier: Modifier = Modifier) {
 fun PantallaDescubrimientoDestinos(
     destinos: List<Destino>,
     onRefresh: () -> Unit,
+    onDestinoClick: (Destino) -> Unit, // Función que maneja clic en un destino
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -102,7 +118,7 @@ fun PantallaDescubrimientoDestinos(
         // Lista de destinos
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(destinos) { destino ->
-                CardDestino(destino)
+                CardDestino(destino, onClick = { onDestinoClick(destino) }) // Llamamos a onDestinoClick
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
@@ -119,14 +135,12 @@ fun PantallaDescubrimientoDestinos(
     }
 }
 
-
-
 // Componente para mostrar cada destino en una tarjeta
 @Composable
-fun CardDestino(destino: Destino) {
+fun CardDestino(destino: Destino, onClick: () -> Unit) {
     Card(
         elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().clickable { onClick() } // Añadimos onClick
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -156,6 +170,7 @@ fun CardDestino(destino: Destino) {
 @Composable
 fun PreviewPantallaDescubrimientoDestinos() {
     TurismoGuatemalaTheme {
-        PantallaDescubrimientoDestinosApp()
+        // Para la vista previa, el navController no es necesario
+        PantallaDescubrimientoDestinosApp(rememberNavController())
     }
 }

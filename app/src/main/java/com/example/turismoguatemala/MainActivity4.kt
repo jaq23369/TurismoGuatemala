@@ -14,6 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.turismoguatemala.ui.theme.TurismoGuatemalaTheme
 import com.example.turismoguatemala.Destino
 
@@ -22,8 +24,9 @@ class MainActivity4 : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TurismoGuatemalaTheme {
-                // Pantalla principal de planificación de viajes
-                PantallaPlanificacionViajes()
+                // Iniciamos el NavController para navegación
+                val navController = rememberNavController()
+                PantallaPlanificacionViajes(navController)
             }
         }
     }
@@ -31,12 +34,12 @@ class MainActivity4 : ComponentActivity() {
 
 // Pantalla de Planificación de Viajes
 @Composable
-fun PantallaPlanificacionViajes() {
+fun PantallaPlanificacionViajes(navController: NavHostController) {
     // Lista de destinos disponibles
     val destinosDisponibles = listOf(
         Destino("Cimarron", "Un monumento natural en Guatemala.", R.drawable.cimarron),
-        Destino("Laguna ordoñez", "Precioso lago en una de las montañas más altas del país.", R.drawable.lagordo),
-        Destino("Atitlán", "Una hermosa playa en el atlantico.", R.drawable.plbl)
+        Destino("Laguna Ordoñez", "Precioso lago en una de las montañas más altas del país.", R.drawable.lagordo),
+        Destino("Atitlán", "Una hermosa playa en el atlántico.", R.drawable.plbl)
     )
 
     // Lista mutable para almacenar los destinos seleccionados por el usuario
@@ -127,11 +130,21 @@ fun PantallaPlanificacionViajes() {
         // Botón para guardar el itinerario
         Button(
             onClick = {
-                // Lógica para guardar el itinerario (puedes conectarlo a almacenamiento o bases de datos)
+                // Aquí puedes implementar la lógica de guardar itinerario en almacenamiento o base de datos
             },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text("Guardar itinerario")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Botón para regresar a la pantalla principal u otra pantalla
+        Button(
+            onClick = { navController.popBackStack() }, // Usamos el NavController para regresar
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text("Volver")
         }
     }
 }
@@ -141,6 +154,6 @@ fun PantallaPlanificacionViajes() {
 @Composable
 fun PreviewPantallaPlanificacionViajes() {
     TurismoGuatemalaTheme {
-        PantallaPlanificacionViajes()
+        PantallaPlanificacionViajes(rememberNavController()) // Previsualización con el navController
     }
 }

@@ -14,18 +14,18 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.turismoguatemala.ui.theme.TurismoGuatemalaTheme
-import com.example.turismoguatemala.Destino
-
 
 class MainActivity2 : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -33,38 +33,36 @@ class MainActivity2 : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TurismoGuatemalaTheme {
-                // Pantalla de Información Detallada para un destino específico
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    val destino = Destino(
-                        nombre = "Cimarron",
-                        descripcion = "Un hermoso monumento natural en medio del desierto.",
-                        imagenResId = R.drawable.cimarron,
-                        comoLlegar = "Puedes llegar en autobús desde Ciudad de Guatemala hasta huehuetengango y luego tomar transporte hacia el cimarron.",
-                        queLlevar = "Lleva ropa cómoda, protector solar y suficiente agua.",
-                        queEsperar = "Naturaleza increíble, senderos y caminata de 2 horas."
-                    )
-                    // Mostrar la pantalla con la información del destino
-                    PantallaInformacionDetallada(destino = destino, onBack = {})
-                }
+                // No necesitamos inicializar el NavController aquí, ya lo pasaremos desde el NavGraph
+                val destino = Destino(
+                    nombre = "Cimarron",
+                    descripcion = "Un hermoso monumento natural en medio del desierto.",
+                    imagenResId = R.drawable.cimarron,
+                    comoLlegar = "Puedes llegar en autobús desde Ciudad de Guatemala hasta huehuetengango y luego tomar transporte hacia el cimarron.",
+                    queLlevar = "Lleva ropa cómoda, protector solar y suficiente agua.",
+                    queEsperar = "Naturaleza increíble, senderos y caminata de 2 horas."
+                )
+                // Solo para previsualizar la pantalla, usamos un NavController simulado
+                PantallaInformacionDetallada(rememberNavController(), destino = destino)
             }
         }
     }
 }
 
-
+// Composable para mostrar la pantalla de información detallada
 @Composable
 fun PantallaInformacionDetallada(
-    destino: Destino,  // El destino seleccionado con su información
-    onBack: () -> Unit // Acción para volver a la pantalla anterior
+    navController: NavHostController, // Recibimos el navController desde el NavGraph
+    destino: Destino
 ) {
-    // Scrollable column to allow vertical scrolling
+    // Scrollable column para permitir desplazamiento vertical
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        // Imagen principal del destino
+        // Imagen del destino
         Image(
             painter = painterResource(id = destino.imagenResId),
             contentDescription = destino.nombre,
@@ -100,9 +98,9 @@ fun PantallaInformacionDetallada(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Botón para regresar o realizar otra acción
+        // Botón para regresar a la pantalla anterior
         Button(
-            onClick = { onBack() },
+            onClick = { navController.popBackStack() }, // Navegación para volver
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text("Volver a la lista")
@@ -110,7 +108,7 @@ fun PantallaInformacionDetallada(
     }
 }
 
-// Componente para mostrar una sección de información con un título y descripción
+// Componente para mostrar una sección de información
 @Composable
 fun InformacionSeccion(titulo: String, descripcion: String) {
     Card(
@@ -144,10 +142,13 @@ fun PreviewPantallaInformacionDetallada() {
     val destino = Destino(
         nombre = "Cimarron",
         descripcion = "Un hermoso monumento natural en medio del desierto.",
-        imagenResId = R.drawable.cimarron,  // Reemplaza con tu recurso real
+        imagenResId = R.drawable.cimarron,
         comoLlegar = "Puedes llegar en autobús desde Ciudad de Guatemala hasta huehuetengango y luego tomar transporte hacia el cimarron.",
         queLlevar = "Lleva ropa cómoda, protector solar y suficiente agua.",
         queEsperar = "Naturaleza increíble, senderos y caminata de 2 horas."
     )
-    PantallaInformacionDetallada(destino = destino, onBack = {})
+    TurismoGuatemalaTheme {
+        // En la vista previa, simulamos el NavController
+        PantallaInformacionDetallada(rememberNavController(), destino)
+    }
 }

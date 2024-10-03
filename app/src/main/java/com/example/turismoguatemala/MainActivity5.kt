@@ -14,6 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.turismoguatemala.ui.theme.TurismoGuatemalaTheme
 
 class MainActivity5 : ComponentActivity() {
@@ -21,8 +23,8 @@ class MainActivity5 : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TurismoGuatemalaTheme {
-                // Pantalla principal de Apoyo a la Comunidad Local
-                PantallaApoyoComunidadLocal()
+                val navController = rememberNavController()  // Añadimos el navController
+                PantallaApoyoComunidadLocal(navController)
             }
         }
     }
@@ -30,7 +32,7 @@ class MainActivity5 : ComponentActivity() {
 
 // Pantalla de Apoyo a la Comunidad Local
 @Composable
-fun PantallaApoyoComunidadLocal() {
+fun PantallaApoyoComunidadLocal(navController: NavHostController) {  // Añadimos navController
     // Lista de proyectos de turismo sostenible
     val proyectosSostenibles = listOf(
         ProyectoSostenible(
@@ -102,6 +104,16 @@ fun PantallaApoyoComunidadLocal() {
                 proyectoSeleccionado = null  // Regresar a la lista
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Botón para regresar a la pantalla anterior
+        Button(
+            onClick = { navController.popBackStack() }, // Botón para regresar
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text("Volver")
+        }
     }
 }
 
@@ -145,6 +157,6 @@ data class ProyectoSostenible(
 @Composable
 fun PreviewPantallaApoyoComunidadLocal() {
     TurismoGuatemalaTheme {
-        PantallaApoyoComunidadLocal()
+        PantallaApoyoComunidadLocal(rememberNavController())  // En el Preview, usamos navController
     }
 }
