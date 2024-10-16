@@ -1,44 +1,53 @@
 package com.example.turismoguatemala.Screen
 
-import android.graphics.Color
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import  com.example.turismoguatemala.view.AuthViewModel
+import com.example.turismoguatemala.view.AuthViewModel
+import com.example.turismoguatemala.data.Result
+
 @Composable
 fun SignUpScreen(
-    authViewModel: AuthViewModel
-    , onNavigateToLogin: () -> Unit
-){
+    authViewModel: AuthViewModel,
+    onNavigateToLogin: () -> Unit,  // Callback para navegar a la pantalla de login
+    onSignUpSuccess: () -> Unit     // Callback para navegar a la pantalla principal después del registro
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
+
+    // Observar el resultado de la autenticación
+    val authResult by authViewModel.authResult.observeAsState()
+
+    // Verificar si el registro fue exitoso
+    authResult?.let {
+        when (it) {
+            is Result.Success -> {
+                if (it.data) onSignUpSuccess()  // Navegar a la pantalla principal
+            }
+            is Result.Error -> {
+                // Mostrar un mensaje de error, si lo deseas
+            }
+            else -> { /* No hacemos nada */ }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -67,6 +76,8 @@ fun SignUpScreen(
         Button(
             onClick = {
                 authViewModel.signUp(email, password, firstName, lastName)
+                onSignUpSuccess()
+                // Limpiar los campos después del registro
                 email = ""
                 password = ""
                 firstName = ""

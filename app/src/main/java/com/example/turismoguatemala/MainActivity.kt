@@ -30,6 +30,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
+import androidx.activity.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.turismoguatemala.view.AuthViewModel
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -40,12 +44,22 @@ class MainActivity : ComponentActivity() {
                 // Creamos el NavController para manejar la navegación
                 val navController = rememberNavController()
 
+                // Verificamos si el usuario ya está autenticado
+                val auth = FirebaseAuth.getInstance()
+                val startDestination = if (auth.currentUser != null) "main" else "login"
+
+                // Usamos viewModel() para obtener una instancia de AuthViewModel
+                val authViewModel: AuthViewModel = viewModel()
+
                 // Usamos Scaffold para incluir la barra de navegación inferior
                 Scaffold(
                     bottomBar = { BottomNavBar(navController) } // Agrega la barra de navegación inferior
                 ) {
                     // Muestra el NavGraph que maneja la navegación entre las pantallas
-                    AppNavGraph(navController = navController)
+                    AppNavGraph(
+                        navController = navController,
+                        startDestination = startDestination,
+                        authViewModel = authViewModel) // Añadimos el ViewModel aquí
                 }
             }
         }

@@ -6,22 +6,50 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.material3.Scaffold
+import com.example.turismoguatemala.Screen.LoginScreen
+import com.example.turismoguatemala.Screen.SignUpScreen
+import com.example.turismoguatemala.view.AuthViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AppNavGraph(navController: NavHostController) {
+fun AppNavGraph(
+    navController: NavHostController,
+    startDestination: String,
+    authViewModel: AuthViewModel
+) {
     Scaffold(
         bottomBar = { BottomNavBar(navController) }  // Añadimos el BottomNavigation
     ) {
-        NavHost(navController = navController, startDestination = "main") {
-            // Pantalla 1: Descubrimiento de destinos
+
+        // Aquí usamos el startDestination
+        NavHost(
+            navController = navController,
+            startDestination = startDestination
+        ) {
+
+
+            composable("login") {
+                LoginScreen(
+                    authViewModel = authViewModel,
+                    onNavigateToSignUp = { navController.navigate("signUp") },
+                    onSignInSuccess = { navController.navigate("main") { popUpTo("login") { inclusive = true } } }
+                )
+            }
+            composable("signUp") {
+                SignUpScreen(
+                    authViewModel = authViewModel,
+                    onNavigateToLogin = { navController.navigate("login") },
+                    onSignUpSuccess = { navController.navigate("main") { popUpTo("signUp") { inclusive = true } } }
+                )
+            }
+
+            // Pantalla 1: Descubrimiento de destinos (pantalla principal)
             composable("main") {
                 PantallaDescubrimientoDestinosApp(navController)
             }
 
             // Pantalla 2: Información detallada
             composable("detalles") {
-                // Simula un destino en esta pantalla
                 val destino = Destino(
                     nombre = "Cimarron",
                     descripcion = "Un hermoso monumento natural en medio del desierto.",
@@ -55,4 +83,5 @@ fun AppNavGraph(navController: NavHostController) {
         }
     }
 }
+
 

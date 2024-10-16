@@ -19,6 +19,7 @@ import com.example.turismoguatemala.Screen.SignUpScreen
 import com.example.turismoguatemala.Screen.LoginScreen
 import com.example.turismoguatemala.ui.theme.TurismoGuatemalaTheme
 import com.example.turismoguatemala.view.AuthViewModel
+
 class MainActivity7: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +46,7 @@ fun NavigationGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.SignupScreen.route
+        startDestination = Screen.SignupScreen.route // O la pantalla que quieras que sea el inicio
     ) {
         composable(Screen.SignupScreen.route) {
             SignUpScreen(
@@ -58,16 +59,19 @@ fun NavigationGraph(
                 authViewModel = authViewModel,
                 onNavigateToSignUp = { navController.navigate(Screen.SignupScreen.route) },
                 onSignInSuccess = {
-                    // Aquí defines la acción al iniciar sesión correctamente
-                    navController.navigate(Screen.ChatRoomsScreen.route)
+                    navController.navigate(Screen.ChatRoomsScreen.route) {
+                        popUpTo(Screen.LoginScreen.route) { inclusive = true }
+                    }
                 }
             )
         }
         composable(Screen.ChatRoomsScreen.route) {
+            // Aquí va tu contenido para la pantalla principal, como el listado de chats
         }
-        composable("${Screen.ChatScreen.route}/{roomId}") {
+        composable("${Screen.ChatScreen.route}/{roomId}") { backStackEntry ->
+            val roomId = backStackEntry.arguments?.getString("roomId")
+            // Usa roomId para cargar la sala de chat correspondiente
         }
     }
 }
-
 
