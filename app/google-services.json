@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "904462375316",
+    "project_id": "turismoguatemala-cf851",
+    "storage_bucket": "turismoguatemala-cf851.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904462375316:android:0bb4569b1f4a4a5a4b1781",
+        "android_client_info": {
+          "package_name": "com.example.turismoguatemala"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGprY3kBtTESzz-vFKFpu22p34S8n6Rhk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
