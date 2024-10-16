@@ -34,6 +34,7 @@ fun LoginScreen(
             }
             is Result.Error -> {
                 // Mostrar un mensaje de error, si lo deseas
+                // Ejemplo: Text(text = "Error al iniciar sesión")
             }
             else -> { /* No hacemos nada */ }
         }
@@ -66,7 +67,8 @@ fun LoginScreen(
         Button(
             onClick = {
                 authViewModel.login(email, password)
-                onSignInSuccess()
+                // NO LLAMAR DIRECTAMENTE onSignInSuccess aquí
+                // Solo se debería llamar si el login es exitoso, lo cual se maneja arriba en el resultado observado
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -80,4 +82,3 @@ fun LoginScreen(
         )
     }
 }
-

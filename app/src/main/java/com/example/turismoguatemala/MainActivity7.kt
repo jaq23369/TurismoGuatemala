@@ -48,29 +48,37 @@ fun NavigationGraph(
         navController = navController,
         startDestination = Screen.SignupScreen.route // O la pantalla que quieras que sea el inicio
     ) {
+        // Pantalla de Registro (SignUp)
         composable(Screen.SignupScreen.route) {
             SignUpScreen(
                 authViewModel = authViewModel,
-                onNavigateToLogin = { navController.navigate(Screen.LoginScreen.route) }
+                onNavigateToLogin = { navController.navigate(Screen.LoginScreen.route) },
+                onSignUpSuccess = { navController.navigate(Screen.ChatRoomsScreen.route) } // Define la ruta de destino en caso de éxito
             )
         }
+
+        // Pantalla de Inicio de Sesión (Login)
         composable(Screen.LoginScreen.route) {
             LoginScreen(
                 authViewModel = authViewModel,
                 onNavigateToSignUp = { navController.navigate(Screen.SignupScreen.route) },
                 onSignInSuccess = {
+                    // Aquí defines la acción al iniciar sesión correctamente
                     navController.navigate(Screen.ChatRoomsScreen.route) {
-                        popUpTo(Screen.LoginScreen.route) { inclusive = true }
+                        popUpTo(Screen.LoginScreen.route) { inclusive = true } // Elimina la pantalla de login de la pila
                     }
                 }
             )
         }
+
+        // Pantalla principal después de iniciar sesión o registrarse
         composable(Screen.ChatRoomsScreen.route) {
-            // Aquí va tu contenido para la pantalla principal, como el listado de chats
+            // Aquí iría la pantalla principal que sigue después del login/registro exitoso
         }
-        composable("${Screen.ChatScreen.route}/{roomId}") { backStackEntry ->
-            val roomId = backStackEntry.arguments?.getString("roomId")
-            // Usa roomId para cargar la sala de chat correspondiente
+
+        // Si tienes más pantallas que navegan desde la principal, las defines aquí
+        composable("${Screen.ChatScreen.route}/{roomId}") {
+            // Aquí iría la lógica para una pantalla específica, en este caso un chat con roomId
         }
     }
 }

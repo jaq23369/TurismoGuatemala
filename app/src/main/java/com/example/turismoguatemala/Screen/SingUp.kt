@@ -32,7 +32,9 @@ fun SignUpScreen(
     authResult?.let {
         when (it) {
             is Result.Success -> {
-                if (it.data) onSignUpSuccess()  // Navegar a la pantalla principal
+                if (it.data) {
+                    onSignUpSuccess()  // Navegar a la pantalla principal solo si el registro fue exitoso
+                }
             }
             is Result.Error -> {
                 // Mostrar un mensaje de error, si lo deseas
@@ -76,12 +78,7 @@ fun SignUpScreen(
         Button(
             onClick = {
                 authViewModel.signUp(email, password, firstName, lastName)
-                onSignUpSuccess()
-                // Limpiar los campos después del registro
-                email = ""
-                password = ""
-                firstName = ""
-                lastName = ""
+                // No llamamos a onSignUpSuccess aquí, ya que esperamos el resultado de Firebase primero
             },
             modifier = Modifier.fillMaxWidth().padding(8.dp)
         ) {
