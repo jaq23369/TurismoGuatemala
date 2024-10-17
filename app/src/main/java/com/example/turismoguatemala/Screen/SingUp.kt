@@ -25,6 +25,9 @@ fun SignUpScreen(
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
 
+    // Estado para mostrar mensajes de error
+    var errorMessage by remember { mutableStateOf("") }
+
     // Observar el resultado de la autenticación
     val authResult by authViewModel.authResult.observeAsState()
 
@@ -37,7 +40,7 @@ fun SignUpScreen(
                 }
             }
             is Result.Error -> {
-                // Mostrar un mensaje de error, si lo deseas
+                errorMessage = "Error: ${it.exception.message}"  // Mostrar mensaje de error
             }
             else -> { /* No hacemos nada */ }
         }
@@ -75,6 +78,12 @@ fun SignUpScreen(
             label = { Text("Last Name") },
             modifier = Modifier.fillMaxWidth().padding(8.dp)
         )
+
+        // Mostrar mensaje de error si existe
+        if (errorMessage.isNotEmpty()) {
+            Text(text = errorMessage, color = androidx.compose.ui.graphics.Color.Red)
+        }
+
         Button(
             onClick = {
                 authViewModel.signUp(email, password, firstName, lastName)

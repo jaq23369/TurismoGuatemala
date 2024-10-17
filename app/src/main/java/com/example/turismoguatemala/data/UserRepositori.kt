@@ -19,10 +19,15 @@ class UserRepository(
         // Creamos el objeto User con la información adicional
         val user = User(firstName, lastName, email)
 
-        // Guardamos la información del usuario en Firestore (usamos UID como ID)
-        saveUserToFirestore(uid, user)
-
-        Result.Success(true)
+        // Guardamos la información del usuario en Firestore
+        try {
+            saveUserToFirestore(uid, user)
+            Result.Success(true)
+        } catch (e: Exception) {
+            // Si falla guardar en Firestore, eliminamos al usuario en Firebase Authentication
+            auth.currentUser?.delete()
+            Result.Error(Exception("Failed to save user data. User removed from Firebase Authentication."))
+        }
     } catch (e: Exception) {
         Result.Error(e)
     }

@@ -1,11 +1,14 @@
 package com.example.turismoguatemala
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
 import com.example.turismoguatemala.Screen.LoginScreen
 import com.example.turismoguatemala.Screen.SignUpScreen
 import com.example.turismoguatemala.view.AuthViewModel
@@ -17,38 +20,50 @@ fun AppNavGraph(
     startDestination: String,
     authViewModel: AuthViewModel
 ) {
+    // Mantenemos el Scaffold aquí, pero la BottomNavBar solo estará en ciertas pantallas
     Scaffold(
-        bottomBar = { BottomNavBar(navController) }  // Añadimos el BottomNavigation
-    ) {
-
-        // Aquí usamos el startDestination
+        bottomBar = {
+            // Mostrar BottomNavBar solo en las pantallas principales
+            val currentRoute = navController.currentBackStackEntry?.destination?.route
+            if (currentRoute != "login" && currentRoute != "signUp") {
+                BottomNavBar(navController)
+            }
+        }
+    ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = startDestination
+            startDestination = startDestination,
+            modifier = Modifier.padding(paddingValues) // Ajustamos el padding
         ) {
-
-
             composable("login") {
+                // Pantalla de Login sin BottomNavBar
                 LoginScreen(
                     authViewModel = authViewModel,
                     onNavigateToSignUp = { navController.navigate("signUp") },
-                    onSignInSuccess = { navController.navigate("main") { popUpTo("login") { inclusive = true } } }
+                    onSignInSuccess = {
+                        navController.navigate("main") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    }
                 )
             }
             composable("signUp") {
+                // Pantalla de SignUp sin BottomNavBar
                 SignUpScreen(
                     authViewModel = authViewModel,
                     onNavigateToLogin = { navController.navigate("login") },
-                    onSignUpSuccess = { navController.navigate("main") { popUpTo("signUp") { inclusive = true } } }
+                    onSignUpSuccess = {
+                        navController.navigate("main") {
+                            popUpTo("signUp") { inclusive = true }
+                        }
+                    }
                 )
             }
-
-            // Pantalla 1: Descubrimiento de destinos (pantalla principal)
             composable("main") {
+                // Pantalla principal con BottomNavBar
                 PantallaDescubrimientoDestinosApp(navController)
             }
-
-            // Pantalla 2: Información detallada
+            // Otras pantallas principales también tendrán BottomNavBar
             composable("detalles") {
                 val destino = Destino(
                     nombre = "Cimarron",
@@ -60,28 +75,23 @@ fun AppNavGraph(
                 )
                 PantallaInformacionDetallada(navController, destino)
             }
-
-            // Pantalla 3: Interacción Comunitaria
             composable("interaccion_comunitaria") {
                 PantallaInteraccionComunitaria(navController)
             }
-
-            // Pantalla 4: Planificación de Viajes
             composable("planificacion") {
                 PantallaPlanificacionViajes(navController)
             }
-
-            // Pantalla 5: Apoyo a la Comunidad Local
             composable("apoyo_comunidad") {
                 PantallaApoyoComunidadLocal(navController)
             }
-
-            // Pantalla 6: Notificaciones y Alertas
             composable("notificaciones") {
                 PantallaNotificacionesYAlertas(navController)
             }
         }
     }
 }
+
+
+
 
 

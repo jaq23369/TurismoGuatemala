@@ -10,7 +10,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.turismoguatemala.ui.theme.TurismoGuatemalaTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -29,9 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
-import androidx.activity.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.turismoguatemala.view.AuthViewModel
 
@@ -180,11 +177,3 @@ fun CardDestino(destino: Destino, onClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewPantallaDescubrimientoDestinos() {
-    TurismoGuatemalaTheme {
-        // Para la vista previa, el navController no es necesario
-        PantallaDescubrimientoDestinosApp(rememberNavController())
-    }
-}

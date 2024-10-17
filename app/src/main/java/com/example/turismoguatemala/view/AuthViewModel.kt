@@ -20,12 +20,34 @@ class AuthViewModel : ViewModel() {
 
     fun signUp(email: String, password: String, firstName: String, lastName: String) {
         viewModelScope.launch {
-            _authResult.value = userRepository.signUp(email, password, firstName, lastName)
+            try {
+                val result = userRepository.signUp(email, password, firstName, lastName)
+                _authResult.value = result
+            } catch (e: Exception) {
+                _authResult.value = Result.Error(e)  // Refleja el error en authResult
+            }
         }
     }
+
+    fun checkIfUserIsLoggedIn() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            _authResult.value = Result.Success(true)  // Usuario ya autenticado
+        } else {
+            _authResult.value = Result.Success(false)  // Usuario no autenticado
+        }
+    }
+
+
     fun login(email: String, password: String) {
         viewModelScope.launch {
-            _authResult.value = userRepository.login(email, password)
+            try {
+                val result = userRepository.login(email, password)
+                _authResult.value = result
+            } catch (e: Exception) {
+                _authResult.value = Result.Error(e)  // Refleja el error en authResult
+            }
         }
     }
 }
+
