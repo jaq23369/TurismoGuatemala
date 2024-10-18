@@ -6,5 +6,5 @@ data class Destino(
     val imagenResId: Int,
     val comoLlegar: String = "",   // Valor por defecto vacío
     val queLlevar: String = "",    // Valor por defecto vacío
-    val queEsperar: String = ""    // Valor por defecto vacío
+    val queEsperar: String = "",
 )

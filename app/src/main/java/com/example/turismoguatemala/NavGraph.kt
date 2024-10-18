@@ -6,17 +6,21 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.material3.Scaffold
+import com.example.turismoguatemala.repository.DestinoRepository
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AppNavGraph(navController: NavHostController) {
+fun AppNavGraph(navController: NavHostController, destinoRepository: DestinoRepository) {
     Scaffold(
         bottomBar = { BottomNavBar(navController) }  // Añadimos el BottomNavigation
     ) {
         NavHost(navController = navController, startDestination = "main") {
             // Pantalla 1: Descubrimiento de destinos
             composable("main") {
-                PantallaDescubrimientoDestinosApp(navController)
+                PantallaDescubrimientoDestinosApp(
+                    navController = navController,
+                    destinoRepository = destinoRepository // Pasar el destinoRepository
+                )
             }
 
             // Pantalla 2: Información detallada
@@ -52,6 +56,11 @@ fun AppNavGraph(navController: NavHostController) {
             composable("notificaciones") {
                 PantallaNotificacionesYAlertas(navController)
             }
+
+            composable("mapa") {
+                PantallaMapa() // Aquí llamas a la función que has definido para mostrar el mapa
+            }
+
         }
     }
 }

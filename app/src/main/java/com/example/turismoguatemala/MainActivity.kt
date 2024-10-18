@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.rememberNavController
+import com.example.turismoguatemala.repository.DestinoRepository
+import com.google.android.gms.maps.MapsInitializer
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -37,15 +41,24 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TurismoGuatemalaTheme {
+                // Inicializa los servicios de Google Maps
+                MapsInitializer.initialize(applicationContext)
+
                 // Creamos el NavController para manejar la navegación
                 val navController = rememberNavController()
+
+                // Crea una instancia de DestinoRepository
+                val destinoRepository = DestinoRepository(applicationContext)
 
                 // Usamos Scaffold para incluir la barra de navegación inferior
                 Scaffold(
                     bottomBar = { BottomNavBar(navController) } // Agrega la barra de navegación inferior
                 ) {
                     // Muestra el NavGraph que maneja la navegación entre las pantallas
-                    AppNavGraph(navController = navController)
+                    AppNavGraph(
+                        navController = navController,
+                        destinoRepository = destinoRepository // Pasa el destinoRepository aquí
+                    )
                 }
             }
         }
@@ -56,15 +69,17 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PantallaDescubrimientoDestinosApp(
-    navController: NavHostController, // Recibe el navController
+    navController: NavHostController,
+    destinoRepository: DestinoRepository,
     modifier: Modifier = Modifier
 ) {
-    val destinos = remember {
-        mutableStateListOf(
-            Destino("El cimarron", "Un hermoso monumento natural en medio del desierto.", R.drawable.cimarron),
-            Destino("Playa blanca", "Una playa preciosa en el atlántico.", R.drawable.plbl),
-            Destino("Laguna Ordoñez", "Un destino de aventuras con impresionantes paisajes montañosos.", R.drawable.lagordo)
-        )
+    var destinos by remember { mutableStateOf<List<Destino>>(emptyList()) }
+    val coroutineScope = rememberCoroutineScope() // Necesitamos este scope para lanzar corutinas
+    val context = LocalContext.current
+
+    // Usamos un efecto de lanzamiento para cargar los destinos de manera asíncrona
+    LaunchedEffect(Unit) {
+        destinos = destinoRepository.getDestinos() // Cargar destinos desde el repositorio
     }
 
     // Scaffold para la barra superior y el contenido principal
@@ -78,14 +93,9 @@ fun PantallaDescubrimientoDestinosApp(
             PantallaDescubrimientoDestinos(
                 destinos = destinos,
                 onRefresh = {
-                    // Acción simulada para agregar más destinos
-                    destinos.add(
-                        Destino(
-                            "Laguna Brava",
-                            "Un lago escondido en las montañas, perfecto para los amantes de la naturaleza.",
-                            android.R.drawable.ic_menu_slideshow
-                        )
-                    )
+                    coroutineScope.launch {
+                        destinos = destinoRepository.getDestinos() // Llamar dentro de una corutina
+                    }
                 },
                 onDestinoClick = { destino ->
                     // Aquí navegas a la pantalla de detalles del destino seleccionado
@@ -101,31 +111,30 @@ fun PantallaDescubrimientoDestinosApp(
 @Composable
 fun PantallaDescubrimientoDestinos(
     destinos: List<Destino>,
-    onRefresh: () -> Unit,
-    onDestinoClick: (Destino) -> Unit, // Función que maneja clic en un destino
+    onRefresh: () -> Unit, // Esto es importante, debe ser un lambda que no retorne nada
+    onDestinoClick: (Destino) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxSize().padding(16.dp)
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
-        // Título
         Text(
             text = "Descubre destinos únicos",
             fontSize = 24.sp,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        // Lista de destinos
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(destinos) { destino ->
-                CardDestino(destino, onClick = { onDestinoClick(destino) }) // Llamamos a onDestinoClick
+                CardDestino(destino, onClick = { onDestinoClick(destino) })
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
 
-        // Botón de refresco para obtener más recomendaciones
         Button(
-            onClick = { onRefresh() },
+            onClick = onRefresh, // Aquí llamamos directamente a la función `onRefresh`
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Icon(Icons.Default.Refresh, contentDescription = "Recargar")
@@ -166,11 +175,4 @@ fun CardDestino(destino: Destino, onClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewPantallaDescubrimientoDestinos() {
-    TurismoGuatemalaTheme {
-        // Para la vista previa, el navController no es necesario
-        PantallaDescubrimientoDestinosApp(rememberNavController())
-    }
-}
+

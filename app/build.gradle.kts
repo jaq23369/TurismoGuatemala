@@ -52,6 +52,14 @@ android {
 
 dependencies {
 
+
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.google.maps.android:maps-compose:2.11.2")
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
     implementation("androidx.compose.material:material:1.3.1")
     implementation("androidx.compose.material:material-icons-core:1.3.1")
     implementation("androidx.compose.material:material-icons-extended:1.3.1")

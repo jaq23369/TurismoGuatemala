@@ -32,7 +32,6 @@ class MainActivity4 : ComponentActivity() {
     }
 }
 
-// Pantalla de Planificación de Viajes
 @Composable
 fun PantallaPlanificacionViajes(navController: NavHostController) {
     // Lista de destinos disponibles
@@ -45,115 +44,122 @@ fun PantallaPlanificacionViajes(navController: NavHostController) {
     // Lista mutable para almacenar los destinos seleccionados por el usuario
     val itinerario = remember { mutableStateListOf<Destino>() }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Título
-        Text(
-            text = "Planificación de Viajes",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+    // Usamos Scaffold para manejar la BottomNavBar y el padding correcto
+    Scaffold(
+        bottomBar = { BottomNavBar(navController) } // Añade la barra de navegación inferior
+    ) { paddingValues -> // Recibimos el padding del Scaffold
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues) // Asegura que el contenido no quede cubierto por la BottomNavBar
+                .padding(16.dp) // Padding adicional para el contenido
+        ) {
+            // Título
+            Text(
+                text = "Planificación de Viajes",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
 
-        // Lista de destinos seleccionables
-        Text(
-            text = "Destinos disponibles:",
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-        )
+            // Lista de destinos seleccionables
+            Text(
+                text = "Destinos disponibles:",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
 
-        LazyColumn(modifier = Modifier.weight(1f)) {
-            items(destinosDisponibles) { destino ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    elevation = CardDefaults.cardElevation(4.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(text = destino.nombre, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Text(text = destino.descripcion, fontSize = 14.sp)
+            LazyColumn(modifier = Modifier.weight(1f)) {
+                items(destinosDisponibles) { destino ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(text = destino.nombre, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text(text = destino.descripcion, fontSize = 14.sp)
 
-                        // Botón para agregar destino al itinerario
-                        Button(
-                            onClick = {
-                                if (destino !in itinerario) {
-                                    itinerario.add(destino)
-                                }
-                            },
-                            modifier = Modifier.align(Alignment.End)
-                        ) {
-                            Text("Agregar al itinerario")
+                            // Botón para agregar destino al itinerario
+                            Button(
+                                onClick = {
+                                    if (destino !in itinerario) {
+                                        itinerario.add(destino)
+                                    }
+                                },
+                                modifier = Modifier.align(Alignment.End)
+                            ) {
+                                Text("Agregar al itinerario")
+                            }
                         }
                     }
                 }
             }
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        // Mostrar el itinerario
-        Text(
-            text = "Tu itinerario:",
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-        )
+            // Mostrar el itinerario
+            Text(
+                text = "Tu itinerario:",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
 
-        LazyColumn(modifier = Modifier.weight(1f)) {
-            items(itinerario) { destino ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    elevation = CardDefaults.cardElevation(4.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(text = destino.nombre, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            LazyColumn(modifier = Modifier.weight(1f)) {
+                items(itinerario) { destino ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        elevation = CardDefaults.cardElevation(4.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(text = destino.nombre, fontWeight = FontWeight.Bold, fontSize = 16.sp)
 
-                        // Botón para eliminar destino del itinerario
-                        Button(
-                            onClick = { itinerario.remove(destino) },
-                            modifier = Modifier.align(Alignment.End)
-                        ) {
-                            Text("Eliminar del itinerario")
+                            // Botón para eliminar destino del itinerario
+                            Button(
+                                onClick = { itinerario.remove(destino) },
+                                modifier = Modifier.align(Alignment.End)
+                            ) {
+                                Text("Eliminar del itinerario")
+                            }
                         }
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón para guardar el itinerario
+            Button(
+                onClick = {
+                    // Implementa lógica para guardar el itinerario aquí
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("Guardar itinerario")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón para regresar a la pantalla principal u otra pantalla
+            Button(
+                onClick = { navController.popBackStack() }, // Usamos el NavController para regresar
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("Volver")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón para ver el mapa
+            Button(
+                onClick = { navController.navigate("mapa") }, // Navegar a la pantalla del mapa
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("Ver Itinerario en el Mapa")
+            }
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Botón para guardar el itinerario
-        Button(
-            onClick = {
-                // Aquí puedes implementar la lógica de guardar itinerario en almacenamiento o base de datos
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text("Guardar itinerario")
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Botón para regresar a la pantalla principal u otra pantalla
-        Button(
-            onClick = { navController.popBackStack() }, // Usamos el NavController para regresar
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text("Volver")
-        }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewPantallaPlanificacionViajes() {
-    TurismoGuatemalaTheme {
-        PantallaPlanificacionViajes(rememberNavController()) // Previsualización con el navController
     }
 }
